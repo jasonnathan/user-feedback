@@ -1,23 +1,20 @@
 UserFeedback = new Mongo.Collection("userfeedback");
 function isModerator(user){
-	var ismod = false;
-	if(Meteor.settings && Meteor.settings.userfeedback 
+	return Meteor.settings && Meteor.settings.userfeedback 
 		&& Meteor.settings.userfeedback.moderators 
-		&& Meteor.settings.userfeedback.moderators[user])
-		ismod = true;
-	return ismod;
+		&& !!Meteor.settings.userfeedback.moderators[user];
 }
 Meteor.startup(function(){
 	// text index search requires that index is present
-	try{
-		UserFeedback._ensureIndex({"head":"text", "desc":"text"},{weights: {"head": 10, "desc": 5,}});
+	// try{
+	// 	UserFeedback._ensureIndex({"head":"text", "desc":"text"},{weights: {"head": 10, "desc": 5,}});
 
-		console.log('index exists');
-	}catch(e){
-		console.log(e);
-		console.log('seems like index could not be reated - this is needed to do search over topic descriptions. '+
-			'You can create the index on mongo command line as db.userfeedback.createIndex({"head":"text", "desc":"text"},{"weights": {"head": 10, "desc": 5,}})');
-	}
+	// 	console.log('index exists');
+	// }catch(e){
+	// 	console.log(e);
+	// 	console.log('seems like index could not be created - this is needed to do search over topic descriptions. '+
+	// 		'You can create the index on mongo command line as db.userfeedback.createIndex({"head":"text", "desc":"text"},{"weights": {"head": 10, "desc": 5,}})');
+	// }
 });
 Meteor.methods({
   initUFB: function(){ // this function is called on opens - returns statistics 
@@ -40,7 +37,7 @@ Meteor.methods({
 	var res = UserFeedback.find({"$text":{"$search":text}}, 
 		{ fields: {'head':1, 'date':1, 'likes':1, 'unlikes':1, 'category':1, '_id':1, 'status':1, 'commentCount':1, 'username':1, 'date':1 }}).fetch();
 
-	console.log('ufb: findToipc '+ text+ ' got '+res.length);
+	console.log('ufb: findTopic '+ text+ ' got '+res.length);
 	return res;	
   },
   setTopic: function (head, typ, desc, topicId) {
@@ -78,72 +75,58 @@ Meteor.methods({
 		throw new Meteor.Error("log in to type on topic");
     check(comment, String);
 	check(type, String);
-	var ufb = UserFeedback.findOne({'_id': topicId}, {fields:{'likes':1, 'unlikes':1, userSet:1, commentCount:1, 'owner':1,'date':1}});
-	var uId = Meteor.userId();
+	var ufb = UserFeedback.findOne({_id: topicId}, {fields:{likes:1, unlikes:1, userSet:1, commentCount:1, owner:1,date:1}});
+	var uId = Meteor.userId();	
+	var updated = false, updateSet = {};
+
 	console.log('ufb: updaing topic id:'+topicId+' type:'+type+ ' comment:'+comment+ ' user:'+uId);
-	var updated = false;
-	if(type == 'likes'){
-		if(!ufb.userSet[uId]){
-			var updateSet = {"likes": ufb.likes + 1};
-			updateSet["userSet."+uId] = 1;
-			UserFeedback.update({'_id': topicId},{"$set":updateSet}); 
-			updated = true;
-		}
-	}
-	else if(type == 'unlikes'){
-		if(!ufb.userSet[uId]){
-			var updateSet = {"unlikes": ufb.unlikes + 1};
-			updateSet["userSet."+uId] = 1;
-			UserFeedback.update({'_id': topicId},{"$set": updateSet}); 
-			updated = true;
-		}
-	}
-	else if(type == 'clikes'){
-		if(!ufb.userSet[uId+'-'+comment]){
-			var updateSet = {};
-			updateSet["userSet."+uId+'-'+comment]=1;
+
+	switch(type){
+		case 'likes':
+		case 'unlikes':		
+			if(!ufb.userSet[uId]){
+				updateSet[type] = ufb.likes + 1
+				updateSet["userSet."+uId] = 1;
+				UserFeedback.update({'_id': topicId},{"$set":updateSet}); 
+				updated = true;
+			}
+		break;
+		case 'clikes':
+		case 'cunlikes':		
+			if(!ufb.userSet[uId+'-'+comment]){
+				updateSet["userSet."+uId+'-'+comment]=1;
+				UserFeedback.update({_id: topicId, "comments.id" : parseInt(comment)},
+					{ "$inc": { "comments.$.rating" : 1 }, "$set":updateSet });
+				updated = true;
+			}
+		break;
+		case 'accept-answer':
 			UserFeedback.update({_id: topicId, "comments.id" : parseInt(comment)},
-				{ "$inc": { "comments.$.rating" : 1 }, "$set":updateSet });
+				{ "$set": {"comments.$.accepted" : true, "status":"Solved"} });
 			updated = true;
-		}
-	}
-	else if(type == 'cunlikes'){
-		if(!ufb.userSet[uId+'-'+comment]){
-			var updateSet = {};
-			updateSet["userSet."+uId+'-'+comment]= -1;
+		break;
+		case 'remove-comment':
 			UserFeedback.update({_id: topicId, "comments.id" : parseInt(comment)},
-				{ "$inc": { "comments.$.rating" : -1 }, "$set":updateSet });
+				{ "$set": {"comments.$.removed" : true} });
 			updated = true;
-		}
-	}
-	else if(type == 'accept-answer'){
-		UserFeedback.update({_id: topicId, "comments.id" : parseInt(comment)},
-			{ "$set": {"comments.$.accepted" : true, "status":"Solved"} });
-		updated = true;
-	}
-	else if(type == 'remove-comment'){
-		UserFeedback.update({_id: topicId, "comments.id" : parseInt(comment)},
-			{ "$set": {"comments.$.removed" : true} });
-		updated = true;
-	}
-	else if(type == 'comment'){
-		var cmt = {"desc":comment, "date": new Date(), "rating": 0};
-		cmt.user = Meteor.userId();
-		cmt.uName = Meteor.user().username;
-		cmt.id = ufb.commentCount + 1;
-		UserFeedback.update({_id: topicId},{"$push":{"comments": cmt}, "$set":{ commentCount: cmt.id}}); 
-		updated = true;
-	}
-	else if(type == 'status'){
-		if(ufb.owner === Meteor.userId() || isModerator(Meteor.userId())){
-			UserFeedback.update({'_id': topicId},{"$set":{"status": comment}}); 
+		break;
+		case 'comment':
+			var cmt = {"desc":comment, "date": new Date(), "rating": 0};
+			cmt.user = Meteor.userId();
+			cmt.uName = Meteor.user().username;
+			cmt.id = ufb.commentCount + 1;
+			UserFeedback.update({_id: topicId},{"$push":{"comments": cmt}, "$set":{ commentCount: cmt.id}}); 
 			updated = true;
-		}
+		break;
+		case 'status':
+			if(ufb.owner === Meteor.userId() || isModerator(Meteor.userId())){
+				UserFeedback.update({'_id': topicId},{"$set":{"status": comment}}); 
+				updated = true;
+			}
+		break;
 	}
-	if(updated)
-		console.log("ufb: updateTopic - successfully updated");
-	else
-		console.log("ufb: updateTopic - did not update for some reason");
+
+	console.log("ufb: updateTopic - "  (updated ? "successfully updated" : "not updated for some reason"));
 
     return UserFeedback.findOne({'_id' : topicId});
   }
