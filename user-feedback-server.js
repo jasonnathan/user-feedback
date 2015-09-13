@@ -85,7 +85,7 @@ Meteor.methods({
 		case 'likes':
 		case 'unlikes':		
 			if(!ufb.userSet[uId]){
-				updateSet[type] = ufb.likes + 1
+				updateSet[type] = ufb[type] + 1
 				updateSet["userSet."+uId] = 1;
 				UserFeedback.update({'_id': topicId},{"$set":updateSet}); 
 				updated = true;
@@ -94,9 +94,10 @@ Meteor.methods({
 		case 'clikes':
 		case 'cunlikes':		
 			if(!ufb.userSet[uId+'-'+comment]){
-				updateSet["userSet."+uId+'-'+comment]=1;
+                var inc = type === 'clikes' ? 1 : -1;
+				updateSet["userSet."+uId+'-'+comment]= inc;
 				UserFeedback.update({_id: topicId, "comments.id" : parseInt(comment)},
-					{ "$inc": { "comments.$.rating" : 1 }, "$set":updateSet });
+					{ "$inc": { "comments.$.rating" : inc }, "$set":updateSet });
 				updated = true;
 			}
 		break;
