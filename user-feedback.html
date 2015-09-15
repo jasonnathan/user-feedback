@@ -1,33 +1,35 @@
 <template name="userfeedback">
 	{{#unless currTopic}}
 	<div class='ufb-head-row'>
+        <a class='ufb-close'><i class="ion-ios-close"></i></a>
 		<div class='ufb-head'>We appreciate your feedback and will act on it.</div>
-		<div class='ufb-close'>&#10006;</div>
+		
 		<div class='ufb-count'>{{topicCount}}</div>
 	</div>
 	<div class='ufb-head-row'>
 		<form class='ufb-search-form'>
-		<input type='search' class='ufb-search' placeholder='Search for an Idea or an Issue'/>
-		<div class='ufb-new' href='#'>Create New Topic</div>
+		<input type='search' class='ufb-search DashboradInput' placeholder='Search for an Idea or an Issue'/>
+		<button class='ufb-new btn btn-heardable-transparent' href='#'>Create New Topic</button>
 
 		</form>
 	</div>
 	{{/unless}}
 	{{#if currTopic}}
-		<div class='ufb-header'>Topic (<a class='ufb-search-button' href='#'>Return to Search</a>)</div><div class='ufb-topic-close'>&#10006;</div>
-
+    <div class='ufb-head-row'>
+		<div class='ufb-topic-close'><i class="ion-ios-close"></i></div><div class='ufb-head'><a class='ufb-search-button' href='#'><i class="ion-ios-arrow-back"></i> Return </a></div>
+    </div>
 		<div class='ufb-row'>
 			{{#if readonly}}
 				<div class='ufb-textbox ufb-readonly'>{{currTopic.head}}</div>
 				<div class='ufb-type-input ufb-readonly'>{{currTopic.category}}</div>
 				<div class='ufb-status-box ufb-readonly'>{{currTopic.status}}</div>
 			{{else}}
-			<input type='textbox' class="ufb-textbox" placeholder="Title of the Topic" readonly="{{readonly}}" value="{{currTopic.head}}" />
-			<select readonly="{{readonly}}" class='ufb-type-input'>{{#each categories}}
+			<input type='textbox' class="ufb-textbox DashboradInput" placeholder="Title of the Topic" readonly="{{readonly}}" value="{{currTopic.head}}" />
+			<select readonly="{{readonly}}" class='ufb-type-input btn btn-heardable-transparent ufb-dd1'>{{#each categories}}
 				<option selected={{ufbmatches currTopic.category id}} value="{{id}}">{{desc}}</option>
 			{{/each}}</select>
 			
-			<select class='ufb-status-box' disabled="{{readonly}}" orig="{{currTopic.status}}" id='ufb-status-box'>
+			<select class='ufb-status-box btn btn-heardable-transparent ufb-dd2' disabled="{{readonly}}" orig="{{currTopic.status}}" id='ufb-status-box'>
 				<option value='Closed' selected={{ufbmatches currTopic.status "Closed"}}>Closed</option>
 				<option value='Solved' selected={{ufbmatches currTopic.status "Solved"}}>Solved</option>
 				<option value='New' selected={{ufbmatches currTopic.status "New"}}>New</option></select>
@@ -41,14 +43,21 @@
 			{{#if readonly}}
 				<div class="ufb-textdesc ufb-readonly">{{currTopic.desc}}</div>
 			{{else}}
-			<textarea class="ufb-textdesc" placeholder="Detailed description of the topic" readonly="{{readonly}}" >{{currTopic.desc}}</textarea>
-			<button class='ufb-save-button'>Save</button>{{/if}}
+            <div class="ufbFLeft"><textarea class="ufb-textdesc DashboradInput" placeholder="Detailed description of the topic" readonly="{{readonly}}" >{{currTopic.desc}}</textarea></div>
+            <div class="ufbFRight"><button class='ufb-save-button btn btn-heardable-transparent UfbM10'>Save</button></div>
+			
+			{{/if}}
 
-			<div class='ufb-like-button'>&#x25B2;{{currTopic.likes}}</div><div class='ufb-unlike-button'>&#x25BC;{{currTopic.unlikes}}</div>
+<!--			<div class='ufb-like-button'>&#x25B2;{{currTopic.likes}}</div><div class='ufb-unlike-button'>&#x25BC;{{currTopic.unlikes}}</div>-->
 		</div>
 		<div class='ufb-row'>
-			<div class='ufb-header'>Comments</div>
-			<div class="ufb-row"><textarea placeholder="Type comment and click Save." class="ufb-comment-input"></textarea><button class='ufb-comment-save'>Save</button></div>
+			<div class='ufb-header text-left'>Comments</div>
+			<div class="ufb-row">
+                <div class="ufbFLeft">
+                <textarea placeholder="Type comment and click Save." class="ufb-comment-input DashboradInput"></textarea>
+                </div>
+                <div class="ufbFRight"><button class='ufb-comment-save btn btn-heardable-transparent UfbM10'>Save</button>
+                </div></div>
 		</div>
 		<div>
 			{{#each ufbsort currTopic.comments "rating" "desc"}}
@@ -65,7 +74,11 @@
 	{{else}}
 		<br/>
 		{{#each topicList}}<div class='ufb-row'>
-			<div class=''><a class='ufb-topic' href='#' id='{{_id}}'>{{head}}</a></div><div class='ufb-like'>&#x25B2;{{likes}}</div>&nbsp;&nbsp;<div class='ufb-unlike'>&#x25BC;{{unlikes}}</div>&nbsp;&nbsp;&nbsp;{{commentCount}} msgs&nbsp;&nbsp;&nbsp;<div class='ufb-status'>&nbsp;{{status}}</div>&nbsp;&nbsp;&nbsp;{{ufbFormatDate date}}
+			<div class='topicLink'><a class='ufb-topic' href='#' id='{{_id}}'>{{head}}</a>
+</div>
+<div class='ufb-like'>&#x25B2;{{likes}}</div>
+<div class='ufb-unlike'>&#x25BC;{{unlikes}}</div><div class="comment">{{commentCount}} msgs</div>
+    <div class='ufb-status'>&nbsp;{{status}}</div><div class="commentDate">{{ufbFormatDate date}}</div>
 			</div>
 		{{/each}}
 		<br/>
