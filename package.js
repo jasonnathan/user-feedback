@@ -16,7 +16,7 @@ Package.onUse(function(api) {
   api.use('templating');
   api.use('accounts-base');
   api.addFiles('user-feedback.html','client');
-  //api.addFiles('user-feedback.css','client');
+  //  api.addFiles('user-feedback.css','client');
   api.addFiles('user-feedback.js','client');
   api.addFiles('user-feedback-server.js','server');
 });
