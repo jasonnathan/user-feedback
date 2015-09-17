@@ -20,7 +20,33 @@
     <div class="container-fluid no-padding container-aling">
 
         <div class="listview col-md-8 right-border" data-step="1" data-intro="">
+            
            
+                {{#each topicList}}
+             <article class="panel panel-transparent m25" style="">
+        <div class="panel-body p10 user-panel-body m10">
+            
+            <div class="row no-padding">
+                    <div class='ufb-row'>
+                        <div class='topicLink'><div class='ufb-topic' id=''>{{head}}
+                            
+                            {{desc}}</div>
+                        </div>
+                        <div class="rightContentEachFeedback">
+                        <div class='ufb-like'>&#x25B2;{{likes}}</div>
+                        <div class='ufb-unlike'>&#x25BC;{{unlikes}}</div>
+<!--                        <div class="comment">{{commentCount}} msgs</div>-->
+                        <div class='ufb-status'>&nbsp;{{status}}</div>
+                        <div class="commentDate">{{ufbFormatDate date}}</div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+            </article>
+                    {{/each}}
+                
+           
+<!--
             <article class="panel panel-transparent m25" style="height:360px;">
         <div class="panel-body p10 user-panel-body m10">
             <div class="row no-padding">
@@ -84,6 +110,7 @@
             </div>
         </div>
     </article>
+-->
         </div>
 
         <div class="listview col-xs-12 col-md-4 right-border">
@@ -167,33 +194,35 @@
     </div>
                 <div class="ufb-row">
                     <div class='col-md-12 '>
-                {{#if readonly}}
-        <div class="ufb-textdesc ufb-readonly col-md-12">{{currTopic.desc}}</div>
-        {{else}}
-        <div class="ufbFLeft">
-            <textarea class="ufb-textdesc DashboradInput" rows="4" placeholder="Detailed description of the topic" readonly="{{readonly}}">{{currTopic.desc}}</textarea>
-        </div>
-        <div class="ufbFRight">
-            <button class='ufb-save-button btn btn-heardable-transparent UfbM10'>Save</button>
-        </div>
+                        {{#if readonly}}
+                            <div class="ufb-textdesc ufb-readonly col-md-12">{{currTopic.desc}}</div>
+                            {{else}}
+                            <div class="ufbFLeft">
+                                <textarea class="ufb-textdesc DashboradInput" rows="4" placeholder="Detailed description of the topic" readonly="{{readonly}}">{{currTopic.desc}}</textarea>
+                            </div>
+                            <div class="ufbFRight">
+                                <button class='ufb-save-button btn btn-heardable-transparent UfbM10'>Save</button>
+                            </div>
 
-        {{/if}}
+                        {{/if}}
                     </div>
                 </div>
+<!--
                 
                 <div class='ufb-row'>
                     <div class='col-md-12 '>
-        <div class='ufb-header text-left'>Comments</div>
-        <div class="ufb-row">
-            <div class="ufbFLeft">
-                <textarea rows="4" placeholder="Type comment and click Save." class="ufb-comment-input DashboradInput"></textarea>
-            </div>
-            <div class="ufbFRight">
-                <button class='ufb-comment-save btn btn-heardable-transparent UfbM10'>Save</button>
-            </div>
-        </div>
+                        <div class='ufb-header text-left'>Comments</div>
+                        <div class="ufb-row">
+                            <div class="ufbFLeft">
+                                <textarea rows="4" placeholder="Type comment and click Save." class="ufb-comment-input DashboradInput"></textarea>
+                            </div>
+                            <div class="ufbFRight">
+                                <button class='ufb-comment-save btn btn-heardable-transparent UfbM10'>Save</button>
+                            </div>
+                        </div>
                     </div>
-    </div>
+                </div>
+-->
             </div>
         </div>
     </article>

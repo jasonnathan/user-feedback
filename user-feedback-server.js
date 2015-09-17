@@ -36,6 +36,7 @@ Meteor.methods({
             fields: {
                 'head': 1,
                 'date': 1,
+                'desc': 1,
                 'likes': 1,
                 'unlikes': 1,
                 'category': 1,
@@ -80,7 +81,7 @@ Meteor.methods({
         check(typ, String);
         check(desc, String);
         var currentUser = Meteor.user(),
-            name = currentUser.profile.firstName + ' ' + currentUser.lastName;
+            name = currentUser.profile.firstName + ' ' + currentUser.profile.lastName;
         
         if (!topicId) {
             var topic = {
@@ -149,7 +150,7 @@ Meteor.methods({
         var updated = false,
             updateSet = {},
             currentUser = Meteor.user(),
-            name = currentUser.profile.firstName + ' ' + currentUser.lastName;
+            name = currentUser.profile.firstName + ' ' + currentUser.profile.lastName;
 
         console.log('ufb: updaing topic id:' + topicId + ' type:' + type + ' comment:' + comment + ' user:' + uId);
 
