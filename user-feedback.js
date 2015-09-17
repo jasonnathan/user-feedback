@@ -95,6 +95,7 @@ Template.userfeedback.helpers({
 		return Session.get('ufb-list');
 	},
 	currTopic: function(){
+        console.log(Session.get('currTopic'));
 		return Session.get('currTopic');
 	},
 	readonly: function(){
