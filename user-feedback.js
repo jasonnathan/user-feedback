@@ -39,6 +39,7 @@ Template.userfblink.helpers({
 		return Session.get('showFb');
 	}
 });
+
 Template.userfblink.events({
 	"click .ufb-button": function (event) {
 		//$('.ufb-page').css('display','block');
@@ -66,6 +67,14 @@ Template.userfeedback.rendered = function(){
 		});	
 
   	}
+    var self = this;
+    var updateDimensions = _.debounce(function(e) {
+        self.containerHeight($(window).innerHeight());
+    });
+    
+    window.addEventListener("resize", updateDimensions, false);
+    
+    updateDimensions();
 };
 
 Template.userfeedback.helpers({
@@ -96,7 +105,11 @@ Template.userfeedback.helpers({
 			isModerator === true) 
 				return null;
 		return "readonly";
-	}
+	},
+    projectsHeight: function(){
+        var height = Template.instance().containerHeight();
+        return !!height ? height - 116 : 0;
+    }
 });
 Template.userfeedback.events({
 	"click .ufb-close": function (event) {
@@ -202,4 +215,9 @@ Template.userfeedback.events({
 		    updateTopic(currTopic._id, "status", val);
 		}
     }
+     
 });
+Template.userfeedback.created = function() {
+    var self = this;
+    self.containerHeight = HD.Observable();
+}
