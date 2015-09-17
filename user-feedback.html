@@ -18,21 +18,24 @@
     </header>
 
     <div class="container-fluid no-padding container-aling">
-
         <div class="listview col-md-8 right-border" data-step="1" data-intro="">
-            
-           
                 {{#each topicList}}
-             <article class="panel panel-transparent m25" style="">
-        <div class="panel-body p10 user-panel-body m10">
-            
-            <div class="row no-padding">
+            <div class="m25">
+            <article class="panel panel-transparent {{isEditMode}}" id="project_{{_id}}" data-projectid="{{_id}}">
+            <header class="panel-heading">
+                <div class="projectsTitleHeader">{{head}}
+                </div>
+                <aside class="panel-config">
+                     
+                </aside>
+            </header>
+            <section class="panel-body p10">
+                <div class="viewMode">
                     <div class='ufb-row'>
-                        <div class='topicLink'><div class='ufb-topic' id=''>{{head}}
-                            
-                            {{desc}}</div>
-                        </div>
-                        <div class="rightContentEachFeedback">
+                    <div class='ufb-topic' id=''>
+                        {{desc}}
+                    </div>
+                    <div class="rightContentEachFeedback">
                         <div class='ufb-like'>&#x25B2;{{likes}}</div>
                         <div class='ufb-unlike'>&#x25BC;{{unlikes}}</div>
 <!--                        <div class="comment">{{commentCount}} msgs</div>-->
@@ -41,8 +44,12 @@
                             </div>
                     </div>
                 </div>
+            </section>
+           
+        </article>
             </div>
-            </article>
+            
+            
                     {{/each}}
                 
            
@@ -113,8 +120,9 @@
 -->
         </div>
 
+<!--
         <div class="listview col-xs-12 col-md-4 right-border">
-            <!--             <h3 class="text-center">My Brands</h3>-->
+                         <h3 class="text-center">My Brands</h3>
             <form class='ufb-search-form p10'>
                 <input type='search' class='ufb-search DashboradInput' placeholder='Search for an Idea or an Issue' />
 
@@ -135,6 +143,7 @@
             </ul>
 
         </div>
+-->
     </div>
 
     <!--
@@ -151,19 +160,17 @@
     <header class="container-fluid page-heading">
         <div class="row no-margin">
             <div class="col-xs-8">
-                 
-		<div class='ufb-head'> <a class='ufb-search-button' href='#'><h4> <i class="ion-ios-arrow-back"></i> Return </h4> </a></div>
-   
+                 <h4>We appreciate your feedback and will act on it. <small style="float:none">{{topicCount}}</small></h4>
+		
             </div>
-            
         </div>
     </header>
-
     <div class="container-fluid no-padding container-aling">
-<div class="listview col-md-8 right-border" style="height:{{projectsHeight}}px; overflow-y:auto;" id="FeedbackMainBg">
-    <article class="panel panel-transparent m25" style="height:360px;">
+        <div class="listview col-md-8 right-border" style="height:{{projectsHeight}}px; overflow-y:auto;">
+ <article class="panel panel-transparent m25" style="height:290px;">
         <div class="panel-body p10 user-panel-body m10">
-            <div class="row no-padding">
+    
+                 <div class="row no-padding">
                 {{#if readonly}}
                 <div class='col-md-4 ufb-readonly'>{{currTopic.head}}</div>
                 <div class='col-md-4 ufb-readonly'>{{currTopic.category}}</div>
@@ -198,15 +205,13 @@
                             <div class="ufb-textdesc ufb-readonly col-md-12">{{currTopic.desc}}</div>
                             {{else}}
                             <div class="ufbFLeft">
-                                <textarea class="ufb-textdesc DashboradInput" rows="4" placeholder="Detailed description of the topic" readonly="{{readonly}}">{{currTopic.desc}}</textarea>
+                                <textarea class="ufb-textdesc DashboradInput" rows="5" placeholder="Detailed description of the topic" readonly="{{readonly}}">{{currTopic.desc}}</textarea>
                             </div>
-                            <div class="ufbFRight">
-                                <button class='ufb-save-button btn btn-heardable-transparent UfbM10'>Save</button>
-                            </div>
+                          
 
                         {{/if}}
                     </div>
-                </div>
+               
 <!--
                 
                 <div class='ufb-row'>
@@ -224,6 +229,32 @@
                 </div>
 -->
             </div>
+            </div>
+            <div class="btn-toolbar">
+                    <div class="btn-group pull-left">
+                       
+                    </div>
+                    <div class="btn-group pull-right">
+                        <button class="btn-heardable-transparent btn btn-lg "><i class="ion-ios-compose"></i><span class="hidden-xs"> Save </span>
+                        </button>
+                        <button class="btn-heardable-transparent btn btn-lg ufb-search-button"><i class="ion-ios-close-outline"></i><span class="hidden-xs"> Cancel</span>
+                        </button>
+                    </div>
+                </div>
+     </div>
+    </article>
+        </div>
+    
+    </div>  
+    
+    
+    
+    
+    <div class="container-fluid no-padding container-aling">
+<div class="listview col-md-8 right-border" style="height:{{projectsHeight}}px; overflow-y:auto;" id="FeedbackMainBg">
+    <article class="panel panel-transparent m25" style="height:360px;">
+        <div class="panel-body p10 user-panel-body m10">
+           
         </div>
     </article>
     <article class=" feedbackPanel panel panel-transparent m25 ">
