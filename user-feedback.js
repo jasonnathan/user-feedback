@@ -144,7 +144,12 @@ Template.userfeedback.events({
         return false;
     },
     "click .ufb-search-button": function (event) {
-        Session.set('currTopic', null);
+        $('.changeAnimation').removeClass("fadeInDown").addClass("fadeOutUp");
+        return Meteor.setTimeout(function(){
+                return Session.set('currTopic', null);
+            }, 275);
+        
+        
     },
     "click .ufb-new": function (event) {
         // create a new topic
