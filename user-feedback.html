@@ -26,7 +26,7 @@
                         <div class="projectsTitleHeader">{{head}}
                         </div>
                         <aside class="panel-config">
-
+                             <a href="" class="ufb-delete-button feedbackDelete"><i class="ion-ios-close-empty"></i></a>
                         </aside>
                     </header>
                     <section class="panel-body p10">
@@ -46,10 +46,18 @@
                         </div>
                     </section>
                     {{#if isOwner}}
-                    <section class="panel-footer">
-                        <button class="btn-heardable-transparent ufb-edit-button">Edit</button>
-                        <button class="btn-heardable-transparent ufb-delete-button">Delete</button>
-                    </section>
+                    <div class="btn-toolbar p10">
+                        <div class="btn-group pull-left">
+                            <button class="btn-heardable-transparent btn btn-lg ufb-edit-button"><i class="ion-ios-compose-outline"></i> Edit</button>
+                            
+                        </div>
+                        <div class="btn-group pull-right">
+                            <button class="btn-heardable-transparent btn btn-lg ufb-delete-button"><i class="ion-ios-close-outline"></i> Delete</button>
+                           
+                        </div>
+                    </div>
+                    
+                    
                     {{/if}}
                 </article>
             </div>
