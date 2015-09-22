@@ -19,41 +19,46 @@
 
     <div class="container-fluid no-padding container-aling animated fadeIn animateDown">
         <div class="listview col-md-8 right-border" data-step="1" data-intro="">
-                {{#each topicList}}
+            {{#each topicList}}
             <div class="m25">
-            <article class="panel panel-transparent {{isEditMode}}" id="project_{{_id}}" data-projectid="{{_id}}">
-            <header class="panel-heading">
-                <div class="projectsTitleHeader">{{head}}
-                </div>
-                <aside class="panel-config">
-                     
-                </aside>
-            </header>
-            <section class="panel-body p10">
-                <div class="viewMode">
-                    <div class='ufb-row'>
-                    <div class='ufb-topic' id=''>
-                        {{desc}}
-                    </div>
-                    <div class="rightContentEachFeedback">
-                        <div class='ufb-like'>&#x25B2;{{likes}}</div>
-                        <div class='ufb-unlike'>&#x25BC;{{unlikes}}</div>
-<!--                        <div class="comment">{{commentCount}} msgs</div>-->
-                        <div class='ufb-status'>&nbsp;{{status}}</div>
-                        <div class="commentDate">{{ufbFormatDate date}}</div>
+                <article class="panel panel-transparent {{isEditMode}}" id="project_{{_id}}" data-projectid="{{_id}}">
+                    <header class="panel-heading">
+                        <div class="projectsTitleHeader">{{head}}
+                        </div>
+                        <aside class="panel-config">
+
+                        </aside>
+                    </header>
+                    <section class="panel-body p10">
+                        <div class="viewMode">
+                            <div class='ufb-row'>
+                                <div class='ufb-topic' id=''>
+                                    {{desc}}
+                                </div>
+                                <div class="rightContentEachFeedback">
+                                    <div class='ufb-like'>&#x25B2;{{likes}}</div>
+                                    <div class='ufb-unlike'>&#x25BC;{{unlikes}}</div>
+                                    <!--                        <div class="comment">{{commentCount}} msgs</div>-->
+                                    <div class='ufb-status'>&nbsp;{{status}}</div>
+                                    <div class="commentDate">{{ufbFormatDate date}}</div>
+                                </div>
                             </div>
-                    </div>
-                </div>
-            </section>
-           
-        </article>
+                        </div>
+                    </section>
+                    {{#if isOwner}}
+                    <section class="panel-footer">
+                        <button class="btn-heardable-transparent ufb-edit-button">Edit</button>
+                        <button class="btn-heardable-transparent ufb-delete-button">Delete</button>
+                    </section>
+                    {{/if}}
+                </article>
             </div>
-            
-            
-                    {{/each}}
-                
-           
-<!--
+
+
+            {{/each}}
+
+
+            <!--
             <article class="panel panel-transparent m25" style="height:360px;">
         <div class="panel-body p10 user-panel-body m10">
             <div class="row no-padding">
@@ -120,7 +125,7 @@
 -->
         </div>
 
-<!--
+        <!--
         <div class="listview col-xs-12 col-md-4 right-border">
                          <h3 class="text-center">My Brands</h3>
             <form class='ufb-search-form p10'>
@@ -155,35 +160,38 @@
 	</div>
 -->
 
-    {{/unless}} {{#if currTopic}}
+    {{/unless}} 
+    {{#if currTopic}}
 
     <header class="container-fluid page-heading">
         <div class="row no-margin">
             <div class="col-xs-8">
-                 <h4>We appreciate your feedback and will act on it. <small style="float:none">{{topicCount}}</small></h4>
-		
+                <h4>We appreciate your feedback and will act on it. <small style="float:none">{{topicCount}}</small></h4>
+
             </div>
         </div>
     </header>
     <div class="container-fluid no-padding container-aling animated fadeInDown changeAnimation">
         <div class="listview col-md-8 right-border" style="height:{{projectsHeight}}px; overflow-y:auto;">
- <article class="panel panel-transparent m25" style="height:290px;">
-        <div class="panel-body p10 user-panel-body m10">
-    
-                 <div class="row no-padding">
-                {{#if readonly}}
-                <div class='col-md-4 ufb-readonly'>{{currTopic.head}}</div>
-                <div class='col-md-4 ufb-readonly'>{{currTopic.category}}</div>
-                <div class='col-md-4 ufb-readonly'>{{currTopic.status}}</div>
-                {{else}}
-                <div class='col-md-6 '>
-                    <input type='textbox' class="ufb-textbox DashboardInput" placeholder="Title of the Topic" readonly="{{readonly}}" value="{{currTopic.head}}" />
-                </div>
-                <div class='col-md-3 '>
-                    <select readonly="{{readonly}}" class='ufb-type-input btn btn-heardable-transparent ufb-dd1'>{{#each categories}}
-                        <option selected={{ufbmatches currTopic.category id}} value="{{id}}">{{desc}}</option>
-                        {{/each}}</select>
-                </div>
+            <article class="panel panel-transparent m25" style="height:290px;">
+                <div class="panel-body p10 user-panel-body m10">
+
+                    <div class="row no-padding">
+                        {{#if readonly}}
+                        <div class='col-md-4 ufb-readonly'>{{currTopic.head}}</div>
+                        <div class='col-md-4 ufb-readonly'>{{currTopic.category}}</div>
+                        <div class='col-md-4 ufb-readonly'>{{currTopic.status}}</div>
+                        {{else}}
+                        <div class='col-md-9 '>
+                            <input type='textbox' class="ufb-textbox DashboardInput" placeholder="Enter a title describing your issue" readonly="{{readonly}}" value="{{currTopic.head}}" />
+                        </div>
+                        <div class='col-md-3'>
+                            <select readonly="{{readonly}}" class='ufb-type-input btn btn-heardable-transparent ufb-dd1'>{{#each categories}}
+                                <option selected={{ufbmatches currTopic.category id}} value="{{id}}">{{desc}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                        <!--
                 <div class='col-md-3 '>
                     <select class='ufb-status-box btn btn-heardable-transparent ufb-dd2' disabled="{{readonly}}" orig="{{currTopic.status}}" id='ufb-status-box'>
                         <option value='Closed' selected={{ufbmatches currTopic.status "Closed"}}>Closed</option>
@@ -191,28 +199,31 @@
                         <option value='New' selected={{ufbmatches currTopic.status "New"}}>New</option>
                     </select>
                 </div>
-                {{/if}}
-                <div class='ufb-row'>
+-->
+                        {{/if}}
+                        <div class='ufb-row'>
+                            <!--
         <div class='col-md-12 '>
             <div class='ufb-topic-user'>by {{currTopic.username}}</div>
             <div class='ufb-topic-date'>on {{ufbFormatDate currTopic.date}}</div>
         </div>
-        
-    </div>
-                <div class="ufb-row">
-                    <div class='col-md-12 '>
-                        {{#if readonly}}
-                            <div class="ufb-textdesc ufb-readonly col-md-12">{{currTopic.desc}}</div>
-                            {{else}}
-                            <div class="ufbFLeft">
-                                <textarea class="ufb-textdesc DashboardInput" rows="5" placeholder="Detailed description of the topic" readonly="{{readonly}}">{{currTopic.desc}}</textarea>
-                            </div>
-                          
+-->
 
-                        {{/if}}
-                    </div>
-               
-<!--
+                        </div>
+                        <div class="ufb-row">
+                            <div class='col-md-12 '>
+                                {{#if readonly}}
+                                <div class="ufb-textdesc ufb-readonly col-md-12">{{currTopic.desc}}</div>
+                                {{else}}
+                                <div class="ufbFLeft">
+                                    <textarea class="ufb-textdesc DashboardInput" rows="7" placeholder="Please be as detailed as possible with your description" readonly="{{readonly}}">{{currTopic.desc}}</textarea>
+                                </div>
+
+
+                                {{/if}}
+                            </div>
+
+                            <!--
                 
                 <div class='ufb-row'>
                     <div class='col-md-12 '>
@@ -228,75 +239,75 @@
                     </div>
                 </div>
 -->
-            </div>
-            </div>
-            <div class="btn-toolbar">
-                    <div class="btn-group pull-left">
-                       <button class="btn-heardable-transparent btn btn-lg "><i class="ion-ios-compose"></i><span class="hidden-xs"> Save Comment </span>
-                        </button>
+                        </div>
                     </div>
-                    <div class="btn-group pull-right">
-                        
-                        <button class="btn-heardable-transparent btn btn-lg ufb-search-button"><i class="ion-ios-close-outline"></i><span class="hidden-xs"> Cancel</span>
-                        </button>
+                    <div class="btn-toolbar">
+                        <div class="btn-group pull-left">
+                            <button class="btn-heardable-transparent btn btn-lg ufb-save-button"><i class="ion-ios-compose"></i><span class="hidden-xs"> Save </span>
+                            </button>
+                        </div>
+                        <div class="btn-group pull-right">
+
+                            <button class="btn-heardable-transparent btn btn-lg ufb-search-button"><i class="ion-ios-close-outline"></i><span class="hidden-xs"> Cancel</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
-     </div>
-    </article>
+            </article>
         </div>
-    
-    </div>  
-    
-    
-    
-    
+
+    </div>
+
+
+
+
     <div class="container-fluid no-padding container-aling">
-<div class="listview col-md-8 right-border" style="height:{{projectsHeight}}px; overflow-y:auto;" id="FeedbackMainBg">
-    <article class="panel panel-transparent m25" style="height:360px;">
-        <div class="panel-body p10 user-panel-body m10">
-           
+        <div class="listview col-md-8 right-border" style="height:{{projectsHeight}}px; overflow-y:auto;" id="FeedbackMainBg">
+            <article class="panel panel-transparent m25" style="height:360px;">
+                <div class="panel-body p10 user-panel-body m10">
+
+                </div>
+            </article>
+            <article class=" feedbackPanel panel panel-transparent m25 ">
+                <div class="feedbackPanel panel-body p10 user-panel-body m10">
+                    {{#each ufbsort currTopic.comments "rating" "desc"}}
+
+
+                    <div class="row no-padding">
+                        <div class='ufb-row borderBottom'>
+
+                            <div class='ufb-comment-details'>
+                                <div class='col-md-8 '>
+                                    {{uName}} <small> {{ufbFormatDate date}}</small>
+                                </div>
+                                <div class='col-md-4 text-left'>
+                                    <div class='ufb-rating'>Rating: {{rating}}</div>
+                                    <a id='cmu{{id}}' href="" class='ufb-rating'><i class="ion-ios-plus"></i></a>
+                                    <a id='cmd{{id}}' href="" class='ufb-rating'>▼</a>
+                                </div>
+
+                                <div class='col-md-8 '>
+                                    {{#if removed}}
+                                    <div class='ufb-comment'>------------- Comment Removed -------------</div>
+                                    {{else}}
+                                    <div class='ufb-comment'>{{desc}}</div>{{#if accepted}}
+                                    <!--            <div class='ufb-accepted'></div>-->
+                                    <div class='ufb-accepted-text'>&check; Accepted Answer</div>{{/if}} {{/if}}
+                                </div>
+                                <div class='col-md-4 '>
+                                    {{#unless readonly}}<a id='cma{{id}}' href='#' class='ufb-accept-answer btn btn-heardable-transparent btn-sm'>Accept Answer</a><a id='cmr{{id}}' href='#' class='ufb-remove-comment btn btn-heardable-transparent btn-sm'>Remove</a>{{/unless}}
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    {{/each}}
+                </div>
+            </article>
         </div>
-    </article>
-    <article class=" feedbackPanel panel panel-transparent m25 ">
-         <div class="feedbackPanel panel-body p10 user-panel-body m10">
-                        {{#each ufbsort currTopic.comments "rating" "desc"}}
-     
-       
-            <div class="row no-padding">
-        <div class='ufb-row borderBottom'>
-            
-            <div class='ufb-comment-details'>
-                <div class='col-md-8 '>
-                    {{uName}} <small> {{ufbFormatDate date}}</small>
-                </div>
-                <div class='col-md-4 text-left'>
-                 <div class='ufb-rating'> Rating: {{rating}} </div>
-                <a id='cmu{{id}}' href="" class='ufb-rating'><i class="ion-ios-plus"></i></a>
-                <a id='cmd{{id}}' href="" class='ufb-rating'>▼</a>
-                   </div>
-            
-                 <div class='col-md-8 '>
-                     {{#if removed}}
-            <div class='ufb-comment'>------------- Comment Removed -------------</div>
-            {{else}}
-            <div class='ufb-comment'>{{desc}}</div>{{#if accepted}}
-<!--            <div class='ufb-accepted'></div>-->
-            <div class='ufb-accepted-text'> &check; Accepted Answer</div>{{/if}} {{/if}}
-                </div>
-                 <div class='col-md-4 '>
-                     {{#unless readonly}}<a id='cma{{id}}' href='#' class='ufb-accept-answer btn btn-heardable-transparent btn-sm'>Accept Answer</a><a id='cmr{{id}}' href='#' class='ufb-remove-comment btn btn-heardable-transparent btn-sm'>Remove</a>{{/unless}} 
-                </div>
-          
-        </div>
-            </div>
-                
-         </div>  
-            
-    
-                {{/each}}
-            </div>
-        </article>  
-</div>
         <div class="listview col-xs-12 col-md-4 right-border">
             <!--             <h3 class="text-center">My Brands</h3>-->
             <form class='ufb-search-form p10'>
@@ -304,7 +315,7 @@
 
             </form>
             <ul class="feedbackQuestionList">
-                <li> {{#each topicList}}
+                <li>{{#each topicList}}
                     <div class='ufb-row'>
                         <div class='topicLink'><a class='ufb-topic' href='#' id='{{_id}}'>{{head}}</a>
                         </div>
@@ -325,11 +336,11 @@
 
         <!--			<div class='ufb-like-button'>&#x25B2;{{currTopic.likes}}</div><div class='ufb-unlike-button'>&#x25BC;{{currTopic.unlikes}}</div>-->
     </div>
-    <div>   
+    <div>
     </div>
     {{else}}
     <br/>
-    <br/> {{/if}}
+    <br/>{{/if}}
 </template>
 <template name="userfblink">
     <div class='ufb-button'>

@@ -16,7 +16,8 @@ Meteor.startup(function() {
     // }
 });
 Meteor.methods({
-    initUFB: function() { // this function is called on opens - returns statistics 
+    initUFB: function() { 
+        // this function is called on opens - returns statistics 
         var topicStatus = UserFeedback.find({}, {
             fields: {
                 "status": 1
@@ -29,6 +30,7 @@ Meteor.methods({
         var statInfo = JSON.stringify(stats);
         var sort_order = {};
         sort_order["likes"] = -1;
+        
         //return articles.find({}, {sort: sort_order, limit: 1});
         stats.topics = UserFeedback.find({}, {
             sort: sort_order,
@@ -43,6 +45,7 @@ Meteor.methods({
                 '_id': 1,
                 'status': 1,
                 'commentCount': 1,
+                'owner':1,
                 'username': 1
             }
         }).fetch();
@@ -65,6 +68,7 @@ Meteor.methods({
                 'category': 1,
                 '_id': 1,
                 'status': 1,
+                'owner': 1,
                 'commentCount': 1,
                 'username': 1,
                 'date': 1
@@ -81,7 +85,7 @@ Meteor.methods({
         check(typ, String);
         check(desc, String);
         var currentUser = Meteor.user(),
-            name = currentUser.profile.firstName + ' ' + currentUser.profile.lastName;
+            name = currentUser.name();
         
         if (!topicId) {
             var topic = {
@@ -98,9 +102,9 @@ Meteor.methods({
                 status: "New"
             };
 
-
+//            return (console.log(currentUser));
             topic.owner = currentUser._id;
-            topic.username = currentUser.username || name;
+            topic.username = currentUser.profile.username || name;
 
             topicId = UserFeedback.insert(topic);
             console.log('ufb: new topic ' + head + ' ' + desc + ' ' + typ);
@@ -150,7 +154,7 @@ Meteor.methods({
         var updated = false,
             updateSet = {},
             currentUser = Meteor.user(),
-            name = currentUser.profile.firstName + ' ' + currentUser.profile.lastName;
+            name = currentUser.name();
 
         console.log('ufb: updaing topic id:' + topicId + ' type:' + type + ' comment:' + comment + ' user:' + uId);
 
@@ -215,7 +219,7 @@ Meteor.methods({
                     "rating": 0
                 };
                 cmt.user = currentUser._id;
-                cmt.uName = currentUser.username || name;
+                cmt.uName = currentUser.profile.username || name;
                 cmt.id = ufb.commentCount + 1;
                 UserFeedback.update({
                     _id: topicId
@@ -248,6 +252,22 @@ Meteor.methods({
         return UserFeedback.findOne({
             '_id': topicId
         });
+    },
+    removeTopic: function(topicId){
+        var cuId = Meteor.userId();
+        
+        if(!cuId)
+            throw new Meteor.Error(403, "User needs to be logged in to perform this action");
+        
+        check(topicId, String);
+        
+        var topic = UserFeedback.findOne(topicId);
+                
+        if (topic.owner === cuId || !isModerator(cuId)){
+            return UserFeedback.remove(topicId);
+        }
+        
+        throw new Meteor.Error(403, "You do not have permission to perform this action");
+        
     }
-
 });
