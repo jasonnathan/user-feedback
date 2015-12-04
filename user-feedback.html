@@ -1,21 +1,52 @@
 <template name="userfeedback">
     {{#unless currTopic}}
-    <header class="container-fluid page-heading">
-        <div class="row no-margin">
-            <div class="col-xs-8">
-                <h4>We appreciate your feedback and will act on it. <small style="float:none">{{topicCount}}</small></h4>
-            </div>
-            <div class="projectsRightBts">
-                <div class="pull-right">
-                    <a class="create-project btn-heardable-transparent btn ufb-new" data-toggle="tooltip" data-placement="bottom" title="CREATE PROJECT">
-                        <i class="ion-ios-plus-outline project-I"></i>
-                        <span class="hidden-xs">Create New</span>
+     <div class="ContentBgColor" style="height:100vh; margin-top:-50px;">
+     <div class="SubHeaderWrapper">
+
+        <div class="SubHeaderLeftBg col-md-9 col-lg-8 no-padding">
+<!--
+            <div class="pull-left">
+                <div class="BtActionsBg ">
+                    <a class="backgroundOrange" href="" id="goBack">
+                        <div class="glyph fs1">
+                            <div class="clearfix pbs">
+                                <svg class="icon icon-ArrowBack">
+                                    <use xlink:href="#icon-ArrowBack"></use>
+                                </svg>
+                            </div>
+                        </div>
                     </a>
+
                 </div>
 
             </div>
+-->
+            <div class="pull-left">
+                <h4>We appreciate your feedback and will act on it. <small style="float:none">{{topicCount}}</small></h4>
+            </div>
+
         </div>
-    </header>
+        <div class="SubHeaderRightBg col-md-3 col-lg-4 no-padding">
+            <div class="projectsRightBts">
+            <div class="pull-right">
+                        <a class="create-project btn-heardable-transparent btn ufb-new " data-toggle="tooltip" data-placement="bottom" title="CREATE PROJECT">
+                        <i class="ion-ios-plus-outline project-I"></i>
+                        <span class="hidden-xs">Create New Feedback</span>
+                    </a>
+                    </div>
+            </div>
+            
+
+<!--
+            <button class="createProjectBt btn btn-view-report hvr-rectangle-out" id="welcomeCreateProject" data-toggle="dropdown">
+
+                <i class="ion-ios-paper-outline"></i>
+                <span class="hidden-xs">Create new Project</span>
+            </button>
+-->
+        </div>
+    </div>
+
 
     <div class="container-fluid no-padding container-aling animated fadeIn animateDown">
         <div class="listview col-md-8 right-border" data-step="1" data-intro="">
@@ -167,9 +198,11 @@
 		<div class='ufb-count'>{{topicCount}}</div>
 	</div>
 -->
-
+    </div>
     {{/unless}} 
+     <div class="ContentBgColor" style="height:100vh; margin-top:-50px;">
     {{#if currTopic}}
+<!--
 
     <header class="container-fluid page-heading">
         <div class="row no-margin">
@@ -179,9 +212,40 @@
             </div>
         </div>
     </header>
+-->
+    
+      <div class="SubHeaderWrapper">
+
+        <div class="SubHeaderLeftBg col-md-12 col-lg-12 no-padding">
+<!--
+            <div class="pull-left">
+                <div class="BtActionsBg ">
+                    <a class="backgroundOrange" href="">
+                        <div class="glyph fs1">
+                            <div class="clearfix pbs">
+                                <svg class="icon icon-ArrowBack">
+                                    <use xlink:href="#icon-ArrowBack"></use>
+                                </svg>
+                            </div>
+                        </div>
+                    </a>
+
+                </div>
+
+            </div>
+-->
+            <div class="pull-left">
+                <h4>We appreciate your feedback and will act on it. <small style="float:none">{{topicCount}}</small></h4>
+            </div>
+
+        </div>
+        
+    </div>
+    
+    
     <div class="container-fluid no-padding container-aling animated fadeInDown changeAnimation">
         <div class="listview col-md-8 right-border" style="height:{{projectsHeight}}px; overflow-y:auto;">
-            <article class="panel panel-transparent m25" style="height:290px;">
+            <article class="panel panel-transparent m25" style="height:310px;">
                 <div class="panel-body p10 user-panel-body m10">
 
                     <div class="row no-padding">
@@ -190,15 +254,35 @@
                         <div class='col-md-4 ufb-readonly'>{{currTopic.category}}</div>
                         <div class='col-md-4 ufb-readonly'>{{currTopic.status}}</div>
                         {{else}}
-                        <div class='col-md-9 '>
-                            <input type='textbox' class="ufb-textbox DashboardInput" placeholder="Enter a title describing your issue" readonly="{{readonly}}" value="{{currTopic.head}}" />
+                        <div class='col-md-8 '>
+                            <input type='textbox' data-required="true" class="ufb-textbox DashboardInput validateFeedback" placeholder="Enter a title describing your issue" readonly="{{readonly}}" value="{{currTopic.head}}" />
                         </div>
-                        <div class='col-md-3'>
+                        <div class='col-md-4'>
+                            
+                            
+                            <div class="btn-group ufb-type-input  ufb-dd1">
+                                 <button type="button"  class="btn btn-heardable-transparent dropdown-toggle dropdBticon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <span class="caret"></span>
+    
+  </button>
+  <button type="button" readonly="{{readonly}}" onclick="showDetails" class="btn btn-heardable-transparent dropdBtText">{{selectTextDropdown}}</button>
+ 
+  <ul class="dropdown-menu">
+      {{#each categories}}
+    <li><a href="#" onclick="showDetails(this)" selected={{ufbmatches currTopic.category id}} value="{{id}}" class="feedbackDDtext">{{desc}}</a></li>
+      {{/each}}
+    
+  </ul>
+</div>
+         </div>                       
+                            
+<!--
                             <select readonly="{{readonly}}" class='ufb-type-input btn btn-heardable-transparent ufb-dd1'>{{#each categories}}
                                 <option selected={{ufbmatches currTopic.category id}} value="{{id}}">{{desc}}</option>
                                 {{/each}}
                             </select>
-                        </div>
+-->
+                    
                         <!--
                 <div class='col-md-3 '>
                     <select class='ufb-status-box btn btn-heardable-transparent ufb-dd2' disabled="{{readonly}}" orig="{{currTopic.status}}" id='ufb-status-box'>
@@ -224,7 +308,7 @@
                                 <div class="ufb-textdesc ufb-readonly col-md-12">{{currTopic.desc}}</div>
                                 {{else}}
                                 <div class="ufbFLeft">
-                                    <textarea class="ufb-textdesc DashboardInput" rows="7" placeholder="Please be as detailed as possible with your description" readonly="{{readonly}}">{{currTopic.desc}}</textarea>
+                                    <textarea class="ufb-textdesc DashboardInput validateFeedback" rows="7" data-required="true" placeholder="Please be as detailed as possible with your description" readonly="{{readonly}}">{{currTopic.desc}}</textarea>
                                 </div>
 
 
@@ -249,14 +333,14 @@
 -->
                         </div>
                     </div>
-                    <div class="btn-toolbar">
+                    <div class="btn-toolbar" style="margin-bottom:10px;">
                         <div class="btn-group pull-left">
-                            <button class="btn-heardable-transparent btn btn-lg ufb-save-button"><i class="ion-ios-compose"></i><span class="hidden-xs"> Save </span>
+                            <button class="btn-heardable-transparent btn btn-lg ufb-save-button" {{isSubmitDisabled}}><i class="ion-ios-compose"></i><span class="hidden-xs"> Save </span>
                             </button>
                         </div>
                         <div class="btn-group pull-right">
 
-                            <button class="btn-heardable-transparent btn btn-lg ufb-search-button"><i class="ion-ios-close-outline"></i><span class="hidden-xs"> Cancel</span>
+                            <button class="btn-heardable-transparent btn btn-lg ufb-search-button" ><i class="ion-ios-close-outline"></i><span class="hidden-xs"> Cancel</span>
                             </button>
                         </div>
                     </div>
@@ -349,6 +433,7 @@
     {{else}}
     <br/>
     <br/>{{/if}}
+    </div>
 </template>
 <template name="userfblink">
     <div class='ufb-button'>

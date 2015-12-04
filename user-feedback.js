@@ -43,12 +43,25 @@ Template.userfblink.helpers({
 });
 
 Template.userfblink.events({
-    "click .ufb-button": function(event) {
-        //$('.ufb-page').css('display','block');
-        Session.set('showFb', true);
+//    "click .ufb-button": function(event) {
+//        //$('.ufb-page').css('display','block');
+//        Session.set('showFb', true);
+//    },
+    "click .feedbackDDtext":function(e, tmpl) {
+        e.preventDefault();
+        var text= $('.feedbackDDtext').text();
+        tmpl.dropdownItem(text); 
     }
 });
 Template.userfeedback.rendered = function() {
+     $('.dropdown-toggle').dropdown()
+    window.showDetails= function(element){
+        //console.log(document.getElementsByClassName("dropdBtText"))
+        $('.dropdBtText').html(element.innerHTML)
+    //document.getElementsByClassName("dropdBtText")
+        //document.getElementsByClassName("dropdBtText")[0].innerHTML = element.innerHTML;
+}
+    
     if (!this.rendered) {
         this.rendered = true;
         // initialize user feedback - get starting list, Stats and isModerator
@@ -80,6 +93,9 @@ Template.userfeedback.rendered = function() {
 };
 
 Template.userfeedback.helpers({
+    selectTextDropdown: function() {
+        return Template.instance().dropdownItem() || "Please Select a Topic";
+    },
     topicCount: function() {
         return Session.get('ufb-stats');
     },
@@ -103,7 +119,6 @@ Template.userfeedback.helpers({
         return Session.get('ufb-list');
     },
     currTopic: function() {
-        console.log(Session.get('currTopic'));
         return Session.get('currTopic');
     },
     readonly: function() {
@@ -126,7 +141,10 @@ Template.userfeedback.helpers({
     projectsHeight: function() {
         var height = Template.instance().containerHeight();
         return !!height ? height - 116 : 0;
-    }
+    },
+    isSubmitDisabled: function() {
+        return Template.instance().isSubmitDisabled();
+    },
 });
 Template.userfeedback.events({
     "click .ufb-close": function(event) {
@@ -283,10 +301,50 @@ Template.userfeedback.events({
             console.log('combobox ' + e.target.id + '=' + val);
             updateTopic(currTopic._id, "status", val);
         }
+    },
+    
+    'blur .validateFeedback, change .validateFeedback, keyup .validateFeedback': function(event, tmpl) {
+        var element = $(event.currentTarget),
+        required = element.attr('data-required'),
+        setError = function (message) {
+        tmpl.isSubmitDisabled("disabled");
+        }
+        setOkay = function (message) {
+            tmpl.isSubmitDisabled("");
+        }
+        if (required === true) {
+            return setError();
+        } else {
+            return setOkay();
+        }
+},
+    'click #goBack': function (e, tmpl) {
+        e.preventDefault();
+        window.history.back();
+
     }
 
 });
 Template.userfeedback.created = function() {
     var self = this;
     self.containerHeight = HD.Observable();
+    self.dropdownItem = HD.Observable();
+    self.isSubmitDisabled = HD.Observable("disabled");
+    self.autorun(function(){
+        var list = Session.get('ufb-list');
+        
+        var hasTopics = list ? Session.get('ufb-list').length > 0 : true;
+        
+        if(hasTopics){
+            return false;
+        }
+        
+        return Meteor.user() ? Session.set('currTopic', {
+            owner: Meteor.userId(),
+            username: Meteor.user().name(),
+            desc: "",
+            date: new Date()
+        }) : {};
+        
+    });
 }
